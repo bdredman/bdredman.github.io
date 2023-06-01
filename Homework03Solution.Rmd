@@ -1,0 +1,204 @@
+---
+title: "Homework 3 Solutions"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+MTH-225
+
+Delta College
+
+([Dave's Web Corner](<http://websites.delta.edu/bdredman>))
+
+### Loading Libraries **ggplot2**, **nycflights13**, **tidyverse**
+
+```{r show libraries, eval = FALSE}
+library("ggplot2")
+library("nycflights13")
+library("tidyverse")
+```
+
+```{r load libraries, include = FALSE}
+library("ggplot2")
+library("nycflights13")
+library("tidyverse")
+```
+
+Assume that all questions in this homework refer to the library
+**nycflights13**.  The documentation on the `flights` data available under "Help" in the Output pane of the RStudio IDE may be helpful.  For example, see the references to `airlines` and `airports` under the descriptions of the variables `carrier`, `origin`, and `dest`.
+
+These questions require both the Data Visualization tools of Chapter 3 and the Data Transformation tools of Chapter 5, as illustrated in the second chapter of this week's reading, Chapter 7 Exploratory Data Analysis.
+
+Our goal in this assignment is to move from "fact gathering" in the first three problems to visualization and possible interpretation in the last two problems. I expect that everyone should have the same responses to the first three questions, but your presentations in the last two questions could reasonably be different.  You are exploring the data and give reasonable answers that would be appropriate for further investigation.
+
+You may begin by restricting your work to the textbook's definition of flights that were not cancelled.
+
+```{r not_cancelled, eval = TRUE}
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+```
+
+### Exercise 7.1
+
+Identify the top 5 carriers ranked by total number of flights not cancelled.  Identify the airlines by name.  Rank the top 5 carriers by number of flights not cancelled.  Use **filter()** to create a data frame that contains the data from `flights`, but only for these top 5 carriers.  
+
+*Solution:*
+
+```{r Exercise 7.1, eval = TRUE}
+(top_5 <- not_cancelled %>% 
+  group_by(carrier) %>% 
+  summarize(flights = n()) %>% 
+  arrange(desc(flights)) %>% 
+  slice_max(flights, n = 5)
+)
+
+top_5$carrier
+
+airlines %>% 
+  filter(carrier %in% top_5$carrier)
+
+(flights_of_top_5 <- flights %>% 
+  filter(carrier %in% top_5$carrier)
+)
+
+(not_cancelled_of_top_5 <- not_cancelled %>% 
+    filter(carrier %in% top_5$carrier)
+)
+```
+
+### Exercise 7.2
+
+Use **group_by()** and **summarize()** to create a data frame that includes the variables `carrier`, `origin`, and new variables `total_flights` for the total number of flights by each `carrier` at each `origin`, and `mean_dep_delay` for the average departure delay (in minutes) for each `carrier` at each `origin.`  Identify each `origin` airport by name.
+
+*Solution:*
+
+```{r Exercise 7.2, eval = TRUE}
+(average_dep_delay_by_carrier_and_origin <- 
+  not_cancelled %>% 
+  group_by(carrier, origin) %>% 
+  select(carrier, origin, dep_delay) %>% 
+  summarize(flights = n(), avg_dep_delay = mean(dep_delay))
+)
+
+airports %>% 
+  filter(faa %in% average_dep_delay_by_carrier_and_origin$origin)
+```
+
+### Exercise 7.3
+
+Use the **summary()** function to summarize the `dep_delay` data for each of the top 5 carriers as illustrated in Exercise 7.3.4.1 of the textbook.
+
+*Solution:*
+
+*We will use the tibble* `not_cancelled_of_top_5` *that we constructed in the first exercise.  One purpose for doing this is to get an idea of the range of this variable, so that we can consider what to do with outliers and how to plan our histogram in the next exercise..  If you are curious, you can also summarize* `dep_delay` *for* `flights` *and * `not_cancelled` *and compare.*  
+
+```{r Exercise 7.3, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  select(dep_delay) %>% 
+  summary()
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "B6") %>% 
+  select(dep_delay) %>% 
+  summary()
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "DL") %>% 
+  select(dep_delay) %>% 
+  summary()
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "EV") %>% 
+  select(dep_delay) %>% 
+  summary()
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "AA") %>% 
+  select(dep_delay) %>% 
+  summary()
+```
+
+### Exercise 7.4
+
+Create a histogram of the `dep_delay` data for the top-ranked airline, both before and after excluding an appropriate number of outliers.
+
+*Solution:*
+
+*The top airlne for number of flights not cancelled was United Airlines* `UA`*.  We know that the maximum *`dep_delay` *for United Airlines was 483 minutes, but in fact,*`dep_delay` *for United Airlines drops off significantly after 100 minutes.* 
+
+```{r Exercise 7.4 a, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = dep_delay), binwidth = 5)
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = dep_delay), binwidth = 5) + 
+  coord_cartesian(ylim = c(0, 100))
+```
+
+*Out of 57,781 United Airlines flights, *`dep_delay` *was greater than 100 minutes 1,850 times, greater than 200 miutes 437 times, greater than 300 miutes 83 times, and greater than 400 miutes only 10 times.*
+
+```{r Exercise 7.4 b, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA", dep_delay > 400) %>% 
+  count()
+```
+
+*Therefore, to present the histogram for departure delays for United Airlines, it does not seem unreasonable to only show up to 200 minutes.*
+
+```{r Exercise 7.4 c, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x = dep_delay), binwidth = 1) + 
+  coord_cartesian(xlim = c(-25, 100))
+```
+
+
+### Exercise 7.5
+
+By use of scatter plots and/or box plots, as appropriate, investigate the relationship between `dep_delay` and `distance` for the top-ranked airline.  This is an open-ended question and there may or may not be any relationships suggested by the data.  You are are not required to investigate this to any depth or conclusion, but demonstrate at least one relevant use of scatter plots and at least one relevant use of box plots.  For example, you could bin the continuous variable `distance`, or facet by `airport` to observe any potential relationships.
+
+*Solution:*
+
+*The distances that United Airlines flew appears grouped at particular distances and bining the distance seems reasonable.*
+
+*Faceting by* `origin` *suggests that the number of United Airlines flights and distances (or destinations) of United Airlines flights does depend on the* `origin` *and that could be investigated further.*
+
+```{r Exercise 7.5 a, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot() +
+    geom_point(mapping = aes(x = distance, y = dep_delay))
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot() +
+    geom_point(mapping = aes(x = distance, y = dep_delay)) + 
+    facet_wrap(~origin)
+```
+
+```{r Exercise 7.5, eval = TRUE}
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot(mapping = aes(x = distance, y = dep_delay)) +
+    geom_boxplot(mapping = aes(group = cut_width(distance, 500)))
+
+not_cancelled_of_top_5 %>% 
+  filter(carrier == "UA") %>% 
+  ggplot(mapping = aes(x = distance, y = dep_delay)) +
+    geom_boxplot(mapping = aes(group = cut_width(distance, 500))) + 
+    facet_wrap(~origin)
+```
+
+
+

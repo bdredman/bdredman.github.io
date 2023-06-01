@@ -1,0 +1,21 @@
+---
+title: "Welcome"
+description: |
+---
+
+<p>
+Welcome to my web site!  My name is David Redman, and I am a mathematics professor in the 
+Science and Mathematics Division at Delta College, University Center, Michigan.  
+</p>
+
+<p>
+My interests include mathematics, computers, origami, chess, go, crochet, racquet sports, 
+and the mandolin.
+</p>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+

@@ -1,0 +1,16 @@
+---
+title: "Contact"
+description: |
+---
+
+You can <a href="mailto:bdredman@delta.edu">e-mail</a> me for further 
+information.
+
+<ul>
+			<li>due Tuesday, June 13: 
+				6.2 -  <a href="https://drive.google.com/file/d/19y8765FIhRmx5hWJWZN__q201X1UXD7L/view?usp=share_link">13 alt</a>, 
+					   <a href="https://drive.google.com/file/d/1pLXQHWWXnDEoqIhDzrr5w8o6FuQfrzrf/view?usp=share_link">14 alt</a>, 
+				6.3 -  <a href="https://drive.google.com/file/d/1TZBn4TQ9ly8hU25GPgnvBHoDsUZXPGtb/view?usp=share_link">7 alt</a>, 
+					   <a href="https://drive.google.com/file/d/1UY6sK9ftYDVv4_BV5LElSYbNMj0c8mag/view?usp=share_link">33 alt</a> 
+			</li>
+</ul>

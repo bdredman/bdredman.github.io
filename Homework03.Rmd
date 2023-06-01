@@ -1,0 +1,85 @@
+---
+title: "Homework 3"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+MTH-225
+
+Delta College
+
+([Dave's Web Corner](<http://websites.delta.edu/bdredman>))
+
+### Loading Libraries **ggplot2**, **nycflights13**, **tidyverse**
+
+```{r show libraries, eval = FALSE}
+library("ggplot2")
+library("nycflights13")
+library("tidyverse")
+```
+
+```{r load libraries, include = FALSE}
+library("ggplot2")
+library("nycflights13")
+library("tidyverse")
+```
+
+Assume that all questions in this homework refer to the library
+**nycflights13**.  The documentation on the `flights` data available under "Help" in the Output pane of the RStudio IDE may be helpful.  For example, see the references to `airlines` and `airports` under the descriptions of the variables `carrier`, `origin`, and `dest`.
+
+These questions require both the Data Visualization tools of Chapter 3 and the Data Transformation tools of Chapter 5, as illustrated in the second chapter of this week's reading, Chapter 7 Exploratory Data Analysis.
+
+Our goal in this assignment is to move from "fact gathering" in the first three problems to visualization and possible interpretation in the last two problems. I expect that everyone should have the same responses to the first three questions, but your presentations in the last two questions could reasonably be different.  You are exploring the data and give reasonable answers that would be appropriate for further investigation.
+
+You may begin by restricting your work to the textbook's definition of flights that were not cancelled.
+
+```{r Exercise 5.2.4.5, eval = FALSE}
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+```
+
+### Exercise 7.1
+
+Identify the top 5 carriers ranked by total number of flights not cancelled.  Identify the airlines by name.  Rank the top 5 carriers by number of flights not cancelled.  Use **filter()** to create a data frame that contains the data from `flights`, but only for these top 5 carriers.  
+
+```{r, eval = FALSE}
+
+```
+
+### Exercise 7.2
+
+Use **group_by()** and **summarize()** to create a data frame that includes the variables `carrier`, `origin`, and new variables `total_flights` for the total number of flights by each `carrier` at each `origin`, and `mean_dep_delay` for the average departure delay (in minutes) for each `carrier` at each `origin.`  Identify each `origin` airport by name.
+
+```{r, eval = FALSE}
+
+```
+
+### Exercise 7.3
+
+Use the **summary()** function to summarize the`dep_delay` data for each of the top 5 carriers as illustrated in Exercise 7.3.4.1 of the textbook.
+
+```{r, eval = FALSE}
+
+```
+
+### Exercise 7.4
+
+Create a histogram of the `dep_delay` data for the top-ranked airline, both before and after excluding an appropriate number of outliers.
+
+```{r, eval = FALSE}
+
+```
+
+### Exercise 7.5
+
+By use of scatter plots and/or box plots, as appropriate, investigate the relationship between `dep_delay` and `distance` for the top-ranked airline.  This is an open-ended question and there may or may not be any relationships suggested by the data.  You are are not required to investigate this to any depth or conclusion, but demonstrate at least one relevant use of scatter plots and at least one relevant use of box plots.  For example, you could bin the continuous variable `distance`, or facet by `airport` to observe any potential relationships.
+
+```{r, eval = FALSE}
+
+```
+

@@ -1,0 +1,16 @@
+name: "bdredman_website"
+title: "Dave's Distill Corner"
+description: |
+  Dave's Distill Corner
+output_dir: "docs"
+navbar:
+  right:
+    - text: "home"
+      href: index.html
+    - text: "about"
+      href: about.html
+    - text: "contact"
+      href: contact.html
+    - text: "homework 3"
+      href: Homework03solution.html
+output: distill::distill_article
